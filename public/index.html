@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>病患預約系統</title>
+    <style>
+      :root {
+        --bg: #f4f8ff;
+        --panel: #ffffff;
+        --primary: #005a9c;
+        --primary-strong: #003d6b;
+        --text: #0f172a;
+        --muted: #475569;
+        --ok: #0f766e;
+        --border: #cbd5e1;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 20% 10%, #dbeafe 0%, transparent 30%),
+          radial-gradient(circle at 90% 0%, #bfdbfe 0%, transparent 20%),
+          var(--bg);
+        min-height: 100vh;
+        font-size: 20px;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 24px auto;
+        padding: 18px;
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-size: clamp(32px, 5vw, 46px);
+        color: var(--primary-strong);
+      }
+
+      .card {
+        background: var(--panel);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+
+      .card + .card {
+        margin-top: 16px;
+      }
+
+      h2 {
+        margin: 0 0 12px;
+        font-size: 30px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+
+      label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px;
+        font-size: 22px;
+        border: 2px solid var(--border);
+        border-radius: 10px;
+      }
+
+      input:focus,
+      button:focus {
+        outline: 3px solid #93c5fd;
+        outline-offset: 1px;
+      }
+
+      .add-btn {
+        margin-top: 14px;
+        border: none;
+        border-radius: 12px;
+        background: var(--primary);
+        color: #fff;
+        font-size: 24px;
+        font-weight: 800;
+        padding: 12px 18px;
+        cursor: pointer;
+      }
+
+      .add-btn:hover {
+        background: var(--primary-strong);
+      }
+
+      .secondary-btn {
+        margin-top: 14px;
+        margin-left: 10px;
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        background: #fff;
+        color: var(--text);
+        font-size: 24px;
+        font-weight: 800;
+        padding: 10px 18px;
+        cursor: pointer;
+      }
+
+      .secondary-btn:hover {
+        background: #f1f5f9;
+      }
+
+      .stats {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 22px;
+      }
+
+      #today-list {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0 0;
+        display: grid;
+        gap: 12px;
+      }
+
+      .patient-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 14px;
+        background: #f8fafc;
+      }
+
+      .patient-item.is-seen {
+        border-color: #5eead4;
+        background: #ecfeff;
+      }
+
+      .patient-info {
+        flex: 1;
+      }
+
+      .line {
+        margin: 4px 0;
+        font-size: 22px;
+      }
+
+      .action-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .action-btn {
+        min-width: 160px;
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 22px;
+        font-weight: 800;
+        padding: 10px 12px;
+        cursor: pointer;
+      }
+
+      .seen-btn {
+        background: #0f766e;
+      }
+
+      .edit-btn {
+        background: #1d4ed8;
+      }
+
+      .delete-btn {
+        background: #b91c1c;
+      }
+
+      .action-btn:disabled {
+        cursor: default;
+        background: #9ca3af;
+      }
+
+      .empty {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 24px;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          font-size: 18px;
+        }
+
+        .patient-item {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .seen-btn {
+          width: 100%;
+        }
+
+        .secondary-btn {
+          width: 100%;
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>病患預約系統</h1>
+
+      <section class="card">
+        <h2 id="form-title">新增病患</h2>
+        <form id="patient-form">
+          <div class="form-grid">
+            <div>
+              <label for="name">姓名</label>
+              <input id="name" name="name" type="text" placeholder="例如：王小明" required />
+            </div>
+            <div>
+              <label for="complaint">主訴</label>
+              <input id="complaint" name="complaint" type="text" placeholder="例如：喉嚨痛" required />
+            </div>
+            <div>
+              <label for="visitTime">看診時間</label>
+              <input id="visitTime" name="visitTime" type="datetime-local" required />
+            </div>
+          </div>
+          <button class="add-btn" id="submit-label" type="submit">新增病患</button>
+          <button class="secondary-btn" id="cancel-edit" type="button" hidden>取消編輯</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>今日看診清單</h2>
+        <p class="stats">
+          今日總人數：<strong id="total-count">0</strong> 人，已看診：<strong id="seen-count">0</strong> 人
+        </p>
+        <p id="empty-state" class="empty">今天尚未有看診資料</p>
+        <ul id="today-list" aria-live="polite"></ul>
+      </section>
+    </main>
+
+    <script src="../app.js"></script>
+  </body>
+</html>
